@@ -23,7 +23,7 @@ contract Dex {
         tokensList.push(ticker);
     }
 
-    function deposit(uint amount, bytes32 ticker) external {
+    function deposit(uint amount, bytes32 ticker) tokenExist(ticker) external {
         // transferFrom needs an approval -> from UI
         IERC20(tokens[ticker].tokenAddress).transferFrom(
             msg.sender,
@@ -32,6 +32,18 @@ contract Dex {
         );
 
         traderBalances[msg.sender][ticker] += amount;
+    }
+
+    function withdraw (uint amount, bytes32 ticker) tokenExist(ticker) external {
+        require(traderBalances[msg.sender][ticker] >= amount, 'not enough balance');
+        traderBalances[msg.sender][ticker] -= amount;
+
+        IERC20(tokens[ticker].tokenAddress).transfer(msg.sender, amount);
+    }
+
+    modifier tokenExist (bytes32 ticker) {
+        require(tokens[ticker].tokenAddress != address(0), 'token is not supported');
+        _;
     }
 
     modifier onlyAdmin() {
