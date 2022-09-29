@@ -29,8 +29,8 @@ contract Dex {
     }
 
     mapping(bytes32 => Token) public tokens;
-    mapping(address => mapping(bytes32 => uint)) traderBalances;
-    mapping(bytes32 => mapping(uint => Order[])) orderBook; // uint 0/1 for Side, should replace uint with some smaller uint8 probably
+    mapping(address => mapping(bytes32 => uint)) public traderBalances;
+    mapping(bytes32 => mapping(uint => Order[])) public orderBook; // uint 0/1 for Side, should replace uint with some smaller uint8 probably
     bytes32[] public tokensList;
 
     address public admin;
